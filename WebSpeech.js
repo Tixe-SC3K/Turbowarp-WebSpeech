@@ -7,7 +7,7 @@ class WebSpeechExtension {
                 {
                     opcode: 'speakAndWait',
                     blockType: Scratch.BlockType.COMMAND,
-                    text: 'speak [TEXT] with pitch [PITCH] rate [RATE] volume [VOLUME]',
+                    text: 'speak [TEXT] pitch [PITCH] rate [RATE] volume [VOLUME]',
                     arguments: {
                         TEXT: {
                             type: Scratch.ArgumentType.STRING,
@@ -55,5 +55,5 @@ class WebSpeechExtension {
     }
 }
 
-// Register extention
+// Register the extension in TurboWarp
 Scratch.extensions.register(new WebSpeechExtension());
