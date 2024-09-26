@@ -37,20 +37,20 @@ class WebSpeechExtension {
         };
     }
 
-    speakAndWait({ TEXT, PITCH, RATE, VOLUME }) {
+    async speakAndWait({ TEXT, PITCH, RATE, VOLUME }) {
+        const utterance = new SpeechSynthesisUtterance(TEXT);
+
+        // Set pitch, rate, and volume
+        utterance.pitch = PITCH;
+        utterance.rate = RATE;
+        utterance.volume = VOLUME;
+
+        // Create a promise that resolves when the speech ends
         return new Promise((resolve) => {
-            const utterance = new SpeechSynthesisUtterance(TEXT);
-
-            // Set pitch, rate, and volume
-            utterance.pitch = PITCH;
-            utterance.rate = RATE;
-            utterance.volume = VOLUME;
-
-            // Resolve the promise when speech ends
-            utterance.onend = resolve;
-            
-            // Speak the text
-            window.speechSynthesis.speak(utterance);
+            utterance.onend = () => {
+                resolve();  // Resolve the promise when speech ends
+            };
+            window.speechSynthesis.speak(utterance);  // Start speaking
         });
     }
 }
