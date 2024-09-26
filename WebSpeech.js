@@ -7,7 +7,7 @@ class WebSpeechExtension {
                 {
                     opcode: 'speakAndWait',
                     blockType: Scratch.BlockType.COMMAND,
-                    text: 'speak [TEXT] pitch [PITCH] rate [RATE] volume [VOLUME]',
+                    text: 'speak and wait [TEXT] pitch [PITCH] rate [RATE] volume [VOLUME]',
                     arguments: {
                         TEXT: {
                             type: Scratch.ArgumentType.STRING,
@@ -37,7 +37,7 @@ class WebSpeechExtension {
         };
     }
 
-    async speakAndWait({ TEXT, PITCH, RATE, VOLUME }) {
+    speakAndWait({ TEXT, PITCH, RATE, VOLUME }, util) {
         const utterance = new SpeechSynthesisUtterance(TEXT);
 
         // Set pitch, rate, and volume
@@ -45,12 +45,17 @@ class WebSpeechExtension {
         utterance.rate = RATE;
         utterance.volume = VOLUME;
 
-        // Create a promise that resolves when the speech ends
+        // Return a promise to wait for speech to finish
         return new Promise((resolve) => {
+            // Set up the onend event to resolve when speaking is done
             utterance.onend = () => {
-                resolve();  // Resolve the promise when speech ends
+                resolve(); // Resolve the promise when speech ends
             };
-            window.speechSynthesis.speak(utterance);  // Start speaking
+
+            // Start speaking
+            window.speechSynthesis.speak(utterance);
+        }).then(() => {
+            util.runNext(); // Call next block when speech ends
         });
     }
 }
