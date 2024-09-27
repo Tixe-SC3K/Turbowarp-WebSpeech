@@ -62,6 +62,11 @@ class WebSpeechExtension {
                             maxValue: 1
                         }
                     }
+                },
+                {
+                    opcode: 'stopAllSpeech',
+                    blockType: Scratch.BlockType.COMMAND,
+                    text: 'stop all speech'
                 }
             ],
             menus: {
@@ -101,6 +106,11 @@ class WebSpeechExtension {
         }).then(() => {
             util.runNext(); // Call next block when speech ends
         });
+    }
+
+    stopAllSpeech() {
+        // Cancel all ongoing speech synthesis and clear the queue
+        window.speechSynthesis.cancel();
     }
 }
 
